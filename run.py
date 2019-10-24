@@ -20,23 +20,23 @@ if __name__ == "__main__":
     #print(parser.tail())
     #print(parser.getHitsByQuery("POE91707.1"))
 
-    parser.setIdentityThreshold(1)
-    perfectHits = parser.getHitsByThresholds()
-    #parser.writeResultsinJson(perfectHits, "perfectHits")
-
-    print(len(perfectHits))
-    print(parser.countQueriesWithHits(perfectHits))
-
-    print("#"*20)
-
-    parserComplementary=BigBlastParser()
-    parserComplementary.setOutputDirectory(RESULTS_DIRECTORY)
-    parserComplementary.readJson(BIG_BLAST_RESULTS_COMPLEMENTARY)
-    parserComplementary.setIdentityThreshold(1)
-    perfectHitsComplementary = parserComplementary.getHitsByThresholds()
-
-    print(len(perfectHitsComplementary))
-    print(parserComplementary.countQueriesWithHits(perfectHitsComplementary))
+    # parser.setIdentityThreshold(1)
+    # perfectHits = parser.getHitsByThresholds()
+    # #parser.writeResultsinJson(perfectHits, "perfectHits")
+    #
+    # print(len(perfectHits))
+    # print(parser.countQueriesWithHits(perfectHits))
+    #
+    # print("#"*20)
+    #
+    # parserComplementary=BigBlastParser()
+    # parserComplementary.setOutputDirectory(RESULTS_DIRECTORY)
+    # parserComplementary.readJson(BIG_BLAST_RESULTS_COMPLEMENTARY)
+    # parserComplementary.setIdentityThreshold(1)
+    # perfectHitsComplementary = parserComplementary.getHitsByThresholds()
+    #
+    # print(len(perfectHitsComplementary))
+    # print(parserComplementary.countQueriesWithHits(perfectHitsComplementary))
 
 
 

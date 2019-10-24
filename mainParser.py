@@ -148,6 +148,36 @@ class BigBlastParser:
 
         return hitsByThresholds
 
+    def getBestHit(self, queryGeneLocusTag, results, parameter):
+
+        bestHit = None
+        bestParameter = None
+        for hitsGeneLocusTag in results[queryGeneLocusTag]:
+            hit = results[queryGeneLocusTag][hitsGeneLocusTag]
+
+            if parameter == 'e_value':
+
+                if bestParameter == None:
+                    bestParameter = float(hit['e_value'])
+                    bestHit = hit
+                elif :
+
+
+        return bestHit
+
+    def getHitsByParameter(self, complementary = False, parameter = 'evalue'):
+
+        if complementary == True:
+            results = self.bigBlastComplementaryResults
+
+        elif complementary == False:
+            results = self.bigBlastResults
+
+        else:
+            raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
+
+        HitsByParameter={}
+
 
     def writeResultsinJson(self, data, jsonFileName):
 
