@@ -252,6 +252,31 @@ class BigBlastParser:
 
         self.outputDirectory = str(value)
 
+    def setThresholds(self, evalueThreshold = "", targetCoverageThreshold = "", queryCoverageThreshold = "", alignmentLengthThreshold = "",
+                      bitScoreThreshold = "", IdentityThreshold = "", ScoreThreshold = ""):
+
+        if evalueThreshold:
+            self.setEvalueThreshold(evalueThreshold)
+
+        if targetCoverageThreshold:
+            self.setTargetCoverageThreshold(targetCoverageThreshold)
+
+        if queryCoverageThreshold:
+            self.setQueryCoverageThreshold(queryCoverageThreshold)
+
+        if alignmentLengthThreshold:
+            self.setAlignmentLengthThreshold(alignmentLengthThreshold)
+
+        if bitScoreThreshold:
+            self.setBitScoreThreshold(bitScoreThreshold)
+
+        if IdentityThreshold:
+            self.setIdentityThreshold(IdentityThreshold)
+
+        if ScoreThreshold:
+            self.setScoreThreshold(ScoreThreshold)
+
+
 
 
 
