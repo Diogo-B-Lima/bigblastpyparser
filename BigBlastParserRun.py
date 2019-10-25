@@ -13,19 +13,14 @@ if __name__ == "__main__":
 
     parser = BigBlastParser()
     parser.setOutputDirectory(RESULTS_DIRECTORY)
-    #print(parser.getEvalueThreshold())
-    #print(parser.getEvalueThreshold())
     parser.readJson(BIG_BLAST_RESULTS)
-    #print(parser.head())
-    #print(parser.tail())
-    #print(parser.getHitsByQuery("POE91707.1"))
 
-    # parser.setIdentityThreshold(1)
-    # perfectHits = parser.getHitsByThresholds()
-    # #parser.writeResultsinJson(perfectHits, "perfectHits")
-    #
-    # print(len(perfectHits))
-    # print(parser.countQueriesWithHits(perfectHits))
+    parser.setIdentityThreshold(1)
+    perfectHits = parser.getHitsByThresholds()
+    parser.writeResultsinJson(perfectHits, "perfectHits")
+
+    print(len(perfectHits))
+    print(parser.countQueriesWithHits(perfectHits))
     #
     # print("#"*20)
     #
