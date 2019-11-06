@@ -1,4 +1,5 @@
 import json
+from FaaParser import FaaParser
 
 
 class BigBlastParser:
@@ -8,16 +9,16 @@ class BigBlastParser:
     def __init__(self):
 
 
-        self.bigBlastResults = {} # store first BLAST of BIDIRECTIONAL BEST HITS SEARCH in a dictionary
-        self.bigBlastComplementaryResults = {} # store second BLAST of BIDIRECTIONAL BEST HITS SEARCH in a dictionary
-        self.evalueThreshold = 100.0 # evalue threshold is the only maximum threshold
-        self.targetCoverageThreshold = 0.0 # all other thresholds are intended to be minimum thresholds
-        self.queryCoverageThreshold = 0.0
-        self.alignmentLengthThreshold = 0.0
-        self.bitScoreThreshold = 0.0
-        self.identityThreshold = 0.0
-        self.scoreThreshold = 0.0
-        self.outputDirectory = ""  # directory where analysis results will be stored
+        self.__bigBlastResults = {} # store first BLAST of BIDIRECTIONAL BEST HITS SEARCH in a dictionary
+        self.__bigBlastComplementaryResults = {} # store second BLAST of BIDIRECTIONAL BEST HITS SEARCH in a dictionary
+        self.__evalueThreshold = 100.0 # evalue threshold is the only maximum threshold
+        self.__targetCoverageThreshold = 0.0 # all other thresholds are intended to be minimum thresholds
+        self.__queryCoverageThreshold = 0.0
+        self.__alignmentLengthThreshold = 0.0
+        self.__bitScoreThreshold = 0.0
+        self.__identityThreshold = 0.0
+        self.__scoreThreshold = 0.0
+        self.__outputDirectory = ""  # directory where analysis results will be stored
 
 
     ##### PUBLIC METHODS ######
@@ -35,10 +36,10 @@ class BigBlastParser:
             data = json.load(input)
 
         if complementary == True:
-            self.bigBlastComplementaryResults = data
+            self.__bigBlastComplementaryResults = data
 
         elif complementary == False:
-            self.bigBlastResults = data
+            self.__bigBlastResults = data
 
         else:
             raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
@@ -53,10 +54,10 @@ class BigBlastParser:
         """
 
         if complementary == True:
-            results = self.bigBlastComplementaryResults
+            results = self.__bigBlastComplementaryResults
 
         elif complementary == False:
-            results = self.bigBlastResults
+            results = self.__bigBlastResults
 
         else:
             raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
@@ -68,10 +69,10 @@ class BigBlastParser:
     def tail(self, complementary = False):
 
         if complementary == True:
-            results = self.bigBlastComplementaryResults
+            results = self.__bigBlastComplementaryResults
 
         elif complementary == False:
-            results = self.bigBlastResults
+            results = self.__bigBlastResults
 
         else:
             raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
@@ -83,10 +84,10 @@ class BigBlastParser:
     def getHitsByQuery(self, query, complementary = False):
 
         if complementary == True:
-            results = self.bigBlastComplementaryResults
+            results = self.__bigBlastComplementaryResults
 
         elif complementary == False:
-            results = self.bigBlastResults
+            results = self.__bigBlastResults
 
         else:
             raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
@@ -97,10 +98,10 @@ class BigBlastParser:
     def getHitsByThresholds(self, complementary = False):
 
         if complementary == True:
-            results = self.bigBlastComplementaryResults
+            results = self.__bigBlastComplementaryResults
 
         elif complementary == False:
-            results = self.bigBlastResults
+            results = self.__bigBlastResults
 
         else:
             raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
@@ -114,31 +115,31 @@ class BigBlastParser:
                 hit = results[queryGeneLocusTag][hitsGeneLocusTag]
                 for parameters in hit:
 
-                    if parameters == "score" and float(hit[parameters]) < self.scoreThreshold:
+                    if parameters == "score" and float(hit[parameters]) < self.__scoreThreshold:
                         hitMeetsThreshold = False
                         break
 
-                    elif parameters == "target_coverage" and float(hit[parameters]) < self.targetCoverageThreshold:
+                    elif parameters == "target_coverage" and float(hit[parameters]) < self.__targetCoverageThreshold:
                         hitMeetsThreshold = False
                         break
 
-                    elif parameters == "align_len" and float(hit[parameters]) < self.alignmentLengthThreshold:
+                    elif parameters == "align_len" and float(hit[parameters]) < self.__alignmentLengthThreshold:
                         hitMeetsThreshold = False
                         break
 
-                    elif parameters == "bitScore" and float(hit[parameters]) < self.bitScoreThreshold:
+                    elif parameters == "bitScore" and float(hit[parameters]) < self.__bitScoreThreshold:
                         hitMeetsThreshold = False
                         break
 
-                    elif parameters == "identity" and float(hit[parameters]) < self.identityThreshold:
+                    elif parameters == "identity" and float(hit[parameters]) < self.__identityThreshold:
                         hitMeetsThreshold = False
                         break
 
-                    elif parameters == "query_coverage" and float(hit[parameters]) < self.queryCoverageThreshold:
+                    elif parameters == "query_coverage" and float(hit[parameters]) < self.__queryCoverageThreshold:
                         hitMeetsThreshold = False
                         break
 
-                    elif parameters == "e_value" and float(hit[parameters]) > self.evalueThreshold:
+                    elif parameters == "e_value" and float(hit[parameters]) > self.__evalueThreshold:
                         hitMeetsThreshold = False
                         break
 
@@ -148,47 +149,16 @@ class BigBlastParser:
 
         return hitsByThresholds
 
-    def getBestHit(self, queryGeneLocusTag, results, parameter):
-
-        bestHit = None
-        bestParameter = None
-        for hitsGeneLocusTag in results[queryGeneLocusTag]:
-            hit = results[queryGeneLocusTag][hitsGeneLocusTag]
-
-            if parameter == 'e_value':
-
-                if bestParameter == None:
-                    bestParameter = float(hit['e_value'])
-                    bestHit = hit
-                elif :
-
-
-        return bestHit
-
-    def getHitsByParameter(self, complementary = False, parameter = 'evalue'):
-
-        if complementary == True:
-            results = self.bigBlastComplementaryResults
-
-        elif complementary == False:
-            results = self.bigBlastResults
-
-        else:
-            raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
-
-        HitsByParameter={}
-
-
     def writeResultsinJson(self, data, jsonFileName):
 
-        if not self.outputDirectory:
+        if not self.__outputDirectory:
             raise Exception("Please set a working directory before writing files")
 
         jsonFileNameProcessed = str(jsonFileName)
         if not jsonFileNameProcessed.endswith(".json"):
             jsonFileNameProcessed += ".json"
 
-        self.__dumpJSON(data, self.outputDirectory+jsonFileNameProcessed)
+        self.__dumpJSON(data, self.__outputDirectory+jsonFileNameProcessed)
 
 
     def countQueriesWithHits(self, data):
@@ -201,6 +171,61 @@ class BigBlastParser:
         return count
 
 
+    def getQueriesWithNoHits(self, faaFile, complementary = False):
+
+        if complementary == False:   # NOTE THAT IN THIS SPECIFIC METHOD WE WANT TO FIND THE FASTA FILE LOCUS TAGS IN THE OPPOSITE BLAST RESULT OF THE BLAST BIDIRECTIONAL SEARCH
+            results = self.__bigBlastComplementaryResults
+
+        elif complementary == True:
+            results = self.__bigBlastResults
+
+        else:
+            raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
+
+        faa = FaaParser()
+        faa.readFaa(faaFile)
+
+        return self.__findUnilateralNonOverlappingItemsFromTwoCollections(faa.getGeneLocusTag(), results)
+
+
+    def getBestHitByParameter(self, parameter, complementary = False):
+
+
+        if complementary == True:
+            results = self.__bigBlastComplementaryResults
+
+        elif complementary == False:
+            results = self.__bigBlastResults
+
+        else:
+            raise Exception("complementary argument must be a boolean, you provided a " + str(type(complementary)) +" instead")
+
+        parametersList = list(list(results[list(results.keys())[0]].values())[0].keys())
+
+        if parameter not in parametersList:
+            raise Exception("you must a enter a valid parameter from the following list:", parametersList)
+
+        queriesWithBestHit = {}
+        for queryGeneLocusTag in results:
+            queriesWithBestHit[queryGeneLocusTag] = {}
+            if parameter == "e_value":
+                bestHitValue = 10000000
+            else:
+                bestHitValue = 0
+
+            for hitsGeneLocusTag in results[queryGeneLocusTag]:
+                hit = results[queryGeneLocusTag][hitsGeneLocusTag]
+                if parameter == "e_value":
+                    if float(hit[parameter]) < bestHitValue:
+                        queriesWithBestHit[queryGeneLocusTag] = {hitsGeneLocusTag : hit}
+                        bestHitValue = float(hit[parameter])
+                else:
+                    if float(hit[parameter]) > bestHitValue:
+                        queriesWithBestHit[queryGeneLocusTag] = {hitsGeneLocusTag : hit}
+                        bestHitValue = float(hit[parameter])
+
+        return queriesWithBestHit
+
 
 
     ##### INTERNAL AUXILIAR METHODS #####
@@ -212,39 +237,69 @@ class BigBlastParser:
 
 
 
+    def __findUnilateralOverlappingItemsFromTwoCollections(self, collection1, collection2):
+
+        result = []
+        for item in collection1:
+            if item in collection2:
+                result.append(item)
+
+        return result
+
+
+    def __findUnilateralNonOverlappingItemsFromTwoCollections(self, collection1, collection2):
+
+        result = []
+        for item in collection1:
+            if item not in collection2:
+                result.append(item)
+
+        return result
+
+
+
+
     ##### GETTERS #####
 
     def getEvalueThreshold(self):
 
-        return self.evalueThreshold
+        return self.__evalueThreshold
 
     def getTargetCoverageThreshold(self):
 
-        return self.targetCoverageThreshold
+        return self.__targetCoverageThreshold
 
     def getQueryCoverageThreshold(self):
 
-        return self.queryCoverageThreshold
+        return self.__queryCoverageThreshold
 
     def getAlignmentLengthThreshold(self):
 
-        return self.alignmentLengthThreshold
+        return self.__alignmentLengthThreshold
 
     def getBitScoreThreshold(self):
 
-        return self.bitScoreThreshold
+        return self.__bitScoreThreshold
 
     def getIdentityThreshold(self):
 
-        return self.identityThreshold
+        return self.__identityThreshold
 
     def getScoreThreshold(self):
 
-        return self.scoreThreshold
+        return self.__scoreThreshold
 
     def getOutputDirectory(self):
 
-        return self.outputDirectory
+        return self.__outputDirectory
+
+    def getBigBlastResults(self):
+
+        return self.__bigBlastResults
+
+    def getBigBlastComplementaryResults(self):
+
+        return self.__bigBlastComplementaryResults
 
 
     ##### SETTERS #####
@@ -252,35 +307,35 @@ class BigBlastParser:
     def setEvalueThreshold(self, value):
 
         valueProcessed = str(value).lower()
-        self.evalueThreshold = float(valueProcessed)
+        self.__evalueThreshold = float(valueProcessed)
 
     def setTargetCoverageThreshold(self, value):
 
-        self.targetCoverageThreshold = float(value)
+        self.__targetCoverageThreshold = float(value)
 
     def setQueryCoverageThreshold(self, value):
 
-        self.queryCoverageThreshold = float(value)
+        self.__queryCoverageThreshold = float(value)
 
     def setAlignmentLengthThreshold(self, value):
 
-        self.alignmentLengthThreshold = float(value)
+        self.__alignmentLengthThreshold = float(value)
 
     def setBitScoreThreshold(self, value):
 
-        self.bitScoreThreshold = float(value)
+        self.__bitScoreThreshold = float(value)
 
     def setIdentityThreshold(self, value):
 
-        self.identityThreshold = float(value)
+        self.__identityThreshold = float(value)
 
     def setScoreThreshold(self, value):
 
-        self.scoreThreshold = float(value)
+        self.__scoreThreshold = float(value)
 
     def setOutputDirectory(self, value):
 
-        self.outputDirectory = str(value)
+        self.__outputDirectory = str(value)
 
     def setThresholds(self, evalueThreshold = "", targetCoverageThreshold = "", queryCoverageThreshold = "", alignmentLengthThreshold = "",
                       bitScoreThreshold = "", IdentityThreshold = "", ScoreThreshold = ""):
@@ -305,6 +360,17 @@ class BigBlastParser:
 
         if ScoreThreshold:
             self.setScoreThreshold(ScoreThreshold)
+
+
+    def setBigBlastResults(self, data):
+
+        self.__bigBlastResults = data
+
+
+    def setBigBlastComplementaryResults(self, data):
+
+        self.__bigBlastComplementaryResults = data
+
 
 
 

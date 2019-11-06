@@ -7,20 +7,53 @@ CURRENT_PATH = Path(os.getcwd())
 RESULTS_DIRECTORY = str(CURRENT_PATH.parent)+ "/big-blast-results/genome-comparison-refseq-vs-genbank/"
 BIG_BLAST_RESULTS = RESULTS_DIRECTORY + "finalResults.json"
 BIG_BLAST_RESULTS_COMPLEMENTARY = RESULTS_DIRECTORY + "complementary_finalResults.json"
+OLD_GENOME_GCF = RESULTS_DIRECTORY + "GCF_002906115.1_CorkOak1.0_protein.faa"
+NEW_GENOME_GCA = RESULTS_DIRECTORY + "GCA_002906115.1_CorkOak1.0_protein.faa"
 
 
-if __name__ == "__main__":
+def findQueriesWithNoHits():
 
     parser = BigBlastParser()
     parser.setOutputDirectory(RESULTS_DIRECTORY)
     parser.readJson(BIG_BLAST_RESULTS)
+    parser.readJson(BIG_BLAST_RESULTS_COMPLEMENTARY, complementary = True)
+    print("Queries with no hits - old genome")
+    print(len(parser.getQueriesWithNoHits(OLD_GENOME_GCF)))
+    print()
+    print("Queries with no hits - new genome")
+    print(len(parser.getQueriesWithNoHits(NEW_GENOME_GCA, complementary = True)))
 
-    parser.setIdentityThreshold(1)
-    perfectHits = parser.getHitsByThresholds()
-    parser.writeResultsinJson(perfectHits, "perfectHits")
 
-    print(len(perfectHits))
-    print(parser.countQueriesWithHits(perfectHits))
+def findBestHitForEachQueryByParameter():
+
+    parser = BigBlastParser()
+    parser.setOutputDirectory(RESULTS_DIRECTORY)
+    parser.readJson(BIG_BLAST_RESULTS)
+    parser.readJson(BIG_BLAST_RESULTS_COMPLEMENTARY, complementary = True)
+    bestTC =  parser.getBestHitByParameter("target_coverage")
+    parser.writeResultsinJson(bestTC, "bestTargetCoverage")
+    bestIdentityComplementary = parser.getBestHitByParameter("identity", complementary = True)
+    parser.writeResultsinJson(bestIdentityComplementary, "bestIdentityComplementary")
+
+
+    print(parser.getBigBlastResults()["POE87087.1"])
+
+
+
+
+
+if __name__ == "__main__":
+
+    # parser = BigBlastParser()
+    # parser.setOutputDirectory(RESULTS_DIRECTORY)
+    # parser.readJson(BIG_BLAST_RESULTS)
+    #
+    # parser.setIdentityThreshold(1)
+    # perfectHits = parser.getHitsByThresholds()
+    # parser.writeResultsinJson(perfectHits, "perfectHits")
+    #
+    # print(len(perfectHits))
+    # print(parser.countQueriesWithHits(perfectHits))
     #
     # print("#"*20)
     #
@@ -32,6 +65,10 @@ if __name__ == "__main__":
     #
     # print(len(perfectHitsComplementary))
     # print(parserComplementary.countQueriesWithHits(perfectHitsComplementary))
+
+    #findQueriesWithNoHits()
+    findBestHitForEachQueryByParameter()
+
 
 
 

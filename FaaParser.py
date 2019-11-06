@@ -8,9 +8,9 @@ class FaaParser:
 
     def __init__(self):
 
-        self.geneLocusTag = []
-        self.faa = ""
-        self.outputDirectory = ""
+        self.__geneLocusTag = []
+        self.__faa = ""
+        self.__outputDirectory = ""
 
 
     def readFaa(self, faaFile):
@@ -24,14 +24,14 @@ class FaaParser:
             output.append(lineProcessed)
             if ">" in lineProcessed:
                 locusTag = lineProcessed.split(" ")[0].replace(">", "")
-                self.geneLocusTag.append(locusTag)
+                self.__geneLocusTag.append(locusTag)
 
 
     def writeGeneLocusTag(self, fileName):
 
-        geneLocusTagForWriting = self.insertLineBreaksInList(self.geneLocusTag)
+        geneLocusTagForWriting = self.insertLineBreaksInList(self.__geneLocusTag)
 
-        with open(self.outputDirectory + fileName, "w") as output:
+        with open(self.__outputDirectory + fileName, "w") as output:
             output.writelines(geneLocusTagForWriting)
 
 
@@ -46,31 +46,31 @@ class FaaParser:
 
     def getFAA(self):
 
-        return self.faa
+        return self.__faa
 
 
     def getGeneLocusTag(self):
 
-        return self.geneLocusTag
+        return self.__geneLocusTag
 
     def getOutputDirectory(self):
 
-        return self.outputDirectory
+        return self.__outputDirectory
 
 
     def setGeneLocusTag(self, value):
 
-        self.geneLocusTag = value
+        self.__geneLocusTag = value
 
 
     def setFAA(self, faa):
 
-        self.faa = str(faa)
+        self.__faa = str(faa)
 
 
     def setOutputDirectory(self, value):
 
-        self.outputDirectory = str(value)
+        self.__outputDirectory = str(value)
 
 
 
