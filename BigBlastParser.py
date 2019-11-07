@@ -229,6 +229,7 @@ class BigBlastParser:
 
 
 
+
     ##### INTERNAL AUXILIAR METHODS #####
 
     def __dumpJSON(self, data, jsonFileName):
