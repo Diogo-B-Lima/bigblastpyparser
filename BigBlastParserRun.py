@@ -7,8 +7,8 @@ CURRENT_PATH = Path(os.getcwd())
 RESULTS_DIRECTORY = str(CURRENT_PATH.parent)+ "/big-blast-results/genome-comparison-refseq-vs-genbank/"
 BIG_BLAST_RESULTS = RESULTS_DIRECTORY + "finalResults.json"
 BIG_BLAST_RESULTS_COMPLEMENTARY = RESULTS_DIRECTORY + "complementary_finalResults.json"
-OLD_GENOME_GCF = RESULTS_DIRECTORY + "GCF_002906115.1_CorkOak1.0_protein.faa"
-NEW_GENOME_GCA = RESULTS_DIRECTORY + "GCA_002906115.1_CorkOak1.0_protein.faa"
+NEW_GENOME_GCF = RESULTS_DIRECTORY + "GCF_002906115.1_CorkOak1.0_protein.faa"
+OLD_GENOME_GCA = RESULTS_DIRECTORY + "GCA_002906115.1_CorkOak1.0_protein.faa"
 
 
 def findQueriesWithNoHits():
@@ -18,10 +18,10 @@ def findQueriesWithNoHits():
     parser.readJson(BIG_BLAST_RESULTS)
     parser.readJson(BIG_BLAST_RESULTS_COMPLEMENTARY, complementary = True)
     print("Queries with no hits - old genome")
-    print(len(parser.getQueriesWithNoHits(OLD_GENOME_GCF)))
+    print(len(parser.getQueriesWithNoHits(NEW_GENOME_GCF)))
     print()
     print("Queries with no hits - new genome")
-    print(len(parser.getQueriesWithNoHits(NEW_GENOME_GCA, complementary = True)))
+    print(len(parser.getQueriesWithNoHits(OLD_GENOME_GCA, complementary = True)))
 
 
 def findBestHitForEachQueryByParameter():
