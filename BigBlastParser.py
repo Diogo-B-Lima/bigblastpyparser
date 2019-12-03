@@ -1,5 +1,7 @@
 import json
 from FaaParser import FaaParser
+import pandas as pd
+from tqdm import tqdm
 
 
 class BigBlastParser:
@@ -32,8 +34,8 @@ class BigBlastParser:
         :return: Void method
         """
 
-        with open(jsonFile) as input:
-            data = json.load(input)
+        data = self.__readJsonWithoutDuplicateKeys(jsonFile) # we used this method instead of loading a JSON file normally as
+        # the output JSON file from the BIG BLAST had issues and contained duplicate keys, although the values are correct
 
         if complementary == True:
             self.__bigBlastComplementaryResults = data
@@ -229,6 +231,29 @@ class BigBlastParser:
 
 
 
+    def JSON2CSV(self, jsonCompletePath, csvOutputCompletePath):
+
+
+        self.readJson(jsonCompletePath)
+        data = self.getBigBlastResults()
+
+        dataframe = []
+        header = ["queryIdentifier", "targetIdentifier", "score", "targetCoverage", "alignmentLength", "bitScore", "identity", "queryCoverage", "eValue"]
+
+        for queryIdentifier in tqdm(data):
+
+            for targetIdentifier in data[queryIdentifier]:
+                dataframeRow = [queryIdentifier]
+                dataframeRow.append(targetIdentifier)
+                dataframeRow += [data[queryIdentifier][targetIdentifier][parameters] for parameters in data[queryIdentifier][targetIdentifier]]
+                dataframe.append(dataframeRow)
+
+        pandasDataframe = pd.DataFrame(data = dataframe, columns = header)
+
+        with open(csvOutputCompletePath, "w") as output:
+            pandasDataframe.to_csv(output, index = False)
+
+
 
     ##### INTERNAL AUXILIAR METHODS #####
 
@@ -255,6 +280,28 @@ class BigBlastParser:
         for item in collection1:
             if item not in collection2:
                 result.append(item)
+
+        return result
+
+
+    def __readJsonWithoutDuplicateKeys(self, jsonFileName):
+
+        with open(jsonFileName, "r") as input:
+            data = input.read().split("}}")
+
+        result = {}
+        for queryAndTargets in tqdm(data):
+            query = queryAndTargets.split(":{")[0].split(" ")[0].replace('{', "").replace('"', "").replace(",","").replace("}", "").replace("\n", "")
+            if query:
+                targets = ":{".join((queryAndTargets.split(":{")[1:])).split("}")
+                if query not in result:
+                    result[query] = {}
+                for targ in targets:
+                    target, parameters = targ.split('":{"')
+                    target = target.replace('"', "").replace(",","")
+                    parameters = eval("{" + '"' + parameters + "}")
+
+                    result[query][target] = parameters
 
         return result
 

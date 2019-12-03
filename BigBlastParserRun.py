@@ -1,6 +1,7 @@
 from BigBlastParser import BigBlastParser
 from pathlib import Path
 import os
+import pandas as pd
 
 
 CURRENT_PATH = Path(os.getcwd())
@@ -9,6 +10,8 @@ BIG_BLAST_RESULTS = RESULTS_DIRECTORY + "finalResults.json"
 BIG_BLAST_RESULTS_COMPLEMENTARY = RESULTS_DIRECTORY + "complementary_finalResults.json"
 NEW_GENOME_GCF = RESULTS_DIRECTORY + "GCF_002906115.1_CorkOak1.0_protein.faa"
 OLD_GENOME_GCA = RESULTS_DIRECTORY + "GCA_002906115.1_CorkOak1.0_protein.faa"
+DEMO = RESULTS_DIRECTORY + "demo.json"
+DATA_DIRECTORY = RESULTS_DIRECTORY + "../../../databases/data/"
 
 
 def findQueriesWithNoHits():
@@ -39,10 +42,28 @@ def findBestHitForEachQueryByParameter():
     print(parser.getBigBlastResults()["POE87087.1"])
 
 
+def convertJSON2CSV():
+
+    parser = BigBlastParser()
+    parser.setOutputDirectory(RESULTS_DIRECTORY)
+    parser.JSON2CSV(BIG_BLAST_RESULTS, BIG_BLAST_RESULTS.replace(".json", ".csv"))
+    parser.JSON2CSV(BIG_BLAST_RESULTS_COMPLEMENTARY, BIG_BLAST_RESULTS_COMPLEMENTARY.replace(".json", ".csv"))
+
+
+def fixJSON2CSVHopefully():
+
+    parser = BigBlastParser()
+    parser.setOutputDirectory(RESULTS_DIRECTORY)
+    parser.readJson(DEMO)
+
+
+
 
 
 
 if __name__ == "__main__":
+
+    pass
 
     # parser = BigBlastParser()
     # parser.setOutputDirectory(RESULTS_DIRECTORY)
@@ -67,7 +88,10 @@ if __name__ == "__main__":
     # print(parserComplementary.countQueriesWithHits(perfectHitsComplementary))
 
     #findQueriesWithNoHits()
-    findBestHitForEachQueryByParameter()
+    #findBestHitForEachQueryByParameter()
+
+    #convertJSON2CSV()
+    #fixJSON2CSVHopefully()
 
 
 
